@@ -9,7 +9,10 @@ Game.controls = {}
 Game.speed = 1.0
 Game.meshes = {}
 
+Game.date = +new Date 4200,0,1,0,0,0,0
+
 selectedItem = undefined
+hudDate = undefined
 
 window.Hotkeys = []
 
@@ -18,6 +21,8 @@ initTJS = () ->
 
 	Detector.addGetWebGLMessage() unless Detector.webgl
 	container = document.getElementById "container"
+	window.worlddate = document.querySelector "#worlddate"
+	window.worldtime = document.querySelector "#worldtime"
 
 	Game.renderer = new THREE.WebGLRenderer()
 	Game.renderer.setSize window.innerWidth, window.innerHeight
@@ -38,6 +43,11 @@ initTJS = () ->
 	# Create game clock
 	Game.clock = new THREE.Clock()
 	Game.clock.start()
+
+	hudDate = document.querySelector '#hudDate'
+
+	# Set speed UI
+	updateSpeed()
 
 	# Setup raycaster for selections
 	Game.projector = new THREE.Projector()
@@ -74,6 +84,9 @@ initTJS = () ->
 render = () ->
 	stats.begin()
 
+	# Update game clock
+	Game.updateClock()
+
 	# Ask for next frame
 	requestAnimationFrame render
 
@@ -83,6 +96,19 @@ render = () ->
 	Game.controls[Game.cameratype].update() if Game.cameratype == "orbit"
 
 	stats.end()
+
+currentSpeed = "speed1"
+Game.updateClock = () ->
+	Game.date += Game.clock.getDelta() * 1000 * Game.speed
+	datetime = new Date(Game.date);
+	worlddate.innerHTML = [pad(datetime.getDate(),2), monthNames[datetime.getMonth()].substr(0,3), datetime.getFullYear()].join(" ");
+	worldtime.innerHTML = [pad(datetime.getHours(),2), pad(datetime.getMinutes(),2), pad(datetime.getSeconds(),2)].join(":");
+
+updateSpeed = () ->
+	speedElements = document.querySelectorAll ".speedbtn"
+	for i in [0...speedElements]
+		speedElements[i].className = "";
+	document.querySelector("#"+currentSpeed).className = "selected";
 
 onClick = () ->
 	return unless event.button == 0

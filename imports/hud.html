@@ -1,7 +1,10 @@
 <polymer-element name="hud-menu">
 <template>
 	<style>
-	div#lowerhud { margin: 0 auto; text-align: center; }
+	div#lowerhud { 
+		margin: 0 auto; text-align: center; 
+		position: fixed; bottom: 10px; left: 0; right: 0;
+	}
 	div.btnzone, div.selectorzone { display: inline-block; }
 	div.btnrow { 
 		margin-bottom: -15px;
@@ -98,4 +101,57 @@ Polymer('hud-button',{
 	}
 });
 </script>
+</polymer-element>
+
+<polymer-element name="hud-date" attributes="selected date monthNames">
+<template>
+	<style>
+	div#upperhud { 
+		margin: 0 auto; text-align: center; color: #fff;
+		position: fixed; top: 10px; left: 0; right: 0;
+	}
+	div#timebar { 
+		display: inline-block; width: 220px; height: 33px; position: relative;
+		background-size:cover; background-image: url(../assets/UI/DateTime.svg);
+		font-size: 24px; font-weight: 200;
+	}
+	span#worlddate { position: absolute; left: 10px; }
+	span#worldtime { position: absolute; right: 7px; }
+
+	ul.speedtoggle { list-style-type: none; margin: 0; padding: 0 }
+	ul.speedtoggle > li { 
+		display: inline-block; margin: 2px; padding: 1px 3px; background-color: #000; border-width: 1px;
+		border-image: linear-gradient(#ccc, #666) 14% stretch; cursor: pointer;
+	}
+	ul.speedtoggle > li.selected {
+		background-color: #fff; color: #000; border-image: linear-gradient(#666, #ccc) 14% stretch;
+	}
+	</style>
+	<div id="upperhud">
+		<div id="timebar"><span id="worlddate">01 Jan 4000</span><span id="worldtime">00:00:00</time></div><br />
+		<ul class="speedtoggle"><li id="speed0" on-click="setSpeed">0x</li><li id="speed1" on-click="setSpeed">1x</li><li id="speed10" on-click="setSpeed">10x</li><li id="speed100" on-click="setSpeed">100x</li><li id="speed1000" on-click="setSpeed">1000x</li><li id="speed10000" on-click="setSpeed">10000x</li></ul>
+	</div>
+</template>
+<script>
+Polymer('hud-date',{
+	monthNames : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+	selected: "speed1",
+	date: 0,
+	setSpeed: function (e) { this.setAttribute("selected", e.srcElement.id); },
+	updateSpeed: function () {
+		for (id in this.$)
+		{
+			if (id.indexOf("speed") < 0) continue;
+			this.$[id].className = "";
+		}
+		this.$[this.getAttribute("selected")].className = "selected";
+	},
+	setDate: function (date) {
+		datetime = new Date(date);
+		this.$.worlddate.innerHTML = [datetime.getDate(), this.getAttribute("monthNames")[datetime.getMonth()].substr(0,3), datetime.getFullYear()].join(" ");
+		this.$.worldtime.innerHTML = [datetime.getHours(), datetime.getMinutes(), datetime.getSeconds()].join(":");
+	},
+	created: function () { this.updateSpeed(); },
+	attributeChanged: function () { this.updateSpeed(); this.setDate(this.getAttribute("date")); }
+});</script>
 </polymer-element>

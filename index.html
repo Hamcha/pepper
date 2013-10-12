@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Pepper r4</title>
+	<title>Pepper r5</title>
 	<link href="css/Interface.css" rel="stylesheet" type="text/css" />
 	<!-- Required libraries -->
 	<script src="libs/polymer.min.js"></script>
@@ -26,7 +26,18 @@
 <body>
 	<div id="interface">
 	<div id="hud">
-		<hud-menu>
+		<div id="upperhud">
+			<div id="timebar"><span id="worlddate">01 Jan 4000</span><span id="worldtime">00:00:00</time></div><br />
+			<ul class="speedtoggle">
+				<li class="speedbtn" id="speed0" onclick="HUD.setSpeed(0)">0x</li>
+				<li class="speedbtn" id="speed1" onclick="HUD.setSpeed(1)">1x</li>
+				<li class="speedbtn" id="speed10" onclick="HUD.setSpeed(10)">10x</li>
+				<li class="speedbtn" id="speed100" onclick="HUD.setSpeed(100)">100x</li>
+				<li class="speedbtn" id="speed1000" onclick="HUD.setSpeed(1000)">1000x</li>
+				<li class="speedbtn" id="speed10000" onclick="HUD.setSpeed(10000)">10000x</li>
+			</ul>
+		</div>
+		<hud-menu id="hudMenu"></hud-menu>
 	</div>
 	</div>
 	<div id="container"></div>

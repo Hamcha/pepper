@@ -19,8 +19,27 @@ canvas {
 	z-index: 1;
 }
 
-#hud {
-	position: fixed;
-	bottom: 10px; left: 0; right: 0;
-	text-align: center;
+div#upperhud { 
+	margin: 0 auto; text-align: center; color: #fff;
+	position: fixed; top: 10px; left: 0; right: 0;
+}
+
+div#timebar { 
+	display: inline-block; width: 220px; height: 33px; position: relative;
+	background-size:cover; background-image: url(../assets/UI/DateTime.svg);
+	font-size: 24px; font-weight: 200;
+}
+
+span#worlddate { position: absolute; left: 10px; }
+span#worldtime { position: absolute; right: 7px; }
+
+ul.speedtoggle { list-style-type: none; margin: 0; padding: 0 }
+
+ul.speedtoggle > li { 
+	display: inline-block; margin: 2px; padding: 1px 3px; background-color: #000; border-width: 1px;
+	border-image: linear-gradient(#ccc, #666) 14% stretch; cursor: pointer;
+}
+
+ul.speedtoggle > li.selected {
+	background-color: #fff; color: #000; border-image: linear-gradient(#666, #ccc) 14% stretch;
 }

@@ -28,9 +28,9 @@ module.exports = function (grunt) {
                 },
                 files: [
                     '{,*/}*.html',
-                    '<%= yeoman.css %>{,*/}*.css',
-                    '<%= yeoman.images %>/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= yeoman.js %>/{,*/}*.js'
+                    //'<%= yeoman.css %>{,*/}*.css',
+                    '<%= yeoman.images %>/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+                    //'<%= yeoman.js %>/{,*/}*.js'
                 ]
             }
         },
@@ -116,5 +116,5 @@ module.exports = function (grunt) {
         }
 	});
     grunt.registerTask('server', ['concurrent:server', 'connect:livereload', 'open', 'watch']);
-    grunt.registerTask('build', ['coffee:web', 'compass']);
+    grunt.registerTask('build', ['coffee:web', 'compass:dist']);
 }
