@@ -1,0 +1,26 @@
+{
+    "name": "pepper",
+    "version": "0.0.0",
+    "dependencies": {
+        "coffee-script": "*",
+        "express": "*"
+    },
+    "devDependencies": {
+        "grunt": "*",
+        "bower": "~0.9.2",
+        "grunt-contrib-watch": "*",
+        "grunt-contrib-coffee": "*",
+        "grunt-contrib-compass": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-concurrent": "*",
+        "grunt-contrib-connect": "*",
+        "grunt-open": "*",
+        "grunt-bower-install": "*",
+        "load-grunt-tasks": "*",
+        "connect-livereload": "*",
+        "time-grunt": "*"
+    },
+    "engines": {
+        "node": ">=0.8.0"
+    }
+}

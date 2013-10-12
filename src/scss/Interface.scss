@@ -1,0 +1,26 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700,900,400italic);
+
+html, body { 
+	margin: 0; padding: 0; overflow: hidden; 
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+canvas { 
+	width: 100%; height: 100%; margin: 0; padding: 0; 
+	background-color: #000; z-index: 0; 
+}
+
+#speed { 
+	position: fixed; bottom: 10px; left: 10px; 
+	color: #fff; font-size: 2em;
+}
+
+#interface {
+	z-index: 1;
+}
+
+#hud {
+	position: fixed;
+	bottom: 10px; left: 0; right: 0;
+	text-align: center;
+}

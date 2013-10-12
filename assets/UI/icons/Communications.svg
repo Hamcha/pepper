@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="20.694px" height="20.618px" viewBox="0 0 20.694 20.618" enable-background="new 0 0 20.694 20.618" xml:space="preserve">
+<g>
+	<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="0.25" y1="10.3089" x2="15.0374" y2="10.3089">
+		<stop  offset="0.0054" style="stop-color:#A6E263"/>
+		<stop  offset="1" style="stop-color:#64A43F"/>
+	</linearGradient>
+	<path fill="url(#SVGID_1_)" stroke="#8CC63F" stroke-width="0.5" stroke-miterlimit="10" d="M2.023,1.541
+		c0,0-4.1,5.743,0.167,12.493s8.934,6.586,10.96,6.164c4.022-0.837,0.865-9.538-2.51-5.037c-2.496,3.329-8.67-9.475-5.705-8.935
+		C9.987,7.146,5.37-3.312,2.023,1.541z"/>
+	<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="7.0572" y1="4.1979" x2="13.9841" y2="4.1979">
+		<stop  offset="0" style="stop-color:#006837"/>
+		<stop  offset="1" style="stop-color:#8CC63F"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_2_)" points="7.057,7.72 10.895,2.674 10.895,3.623 13.984,0.676 10.895,4.623 10.521,3.773 	"/>
+	<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="8.4457" y1="7.411" x2="20.6939" y2="7.411">
+		<stop  offset="0" style="stop-color:#006837"/>
+		<stop  offset="1" style="stop-color:#8CC63F"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_3_)" points="8.446,9.86 15.772,5.78 15.324,6.915 20.694,4.962 14.852,8.109 14.77,6.903 	"/>
+	<linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="9.4559" y1="11.1993" x2="20.1365" y2="11.1993">
+		<stop  offset="0" style="stop-color:#006837"/>
+		<stop  offset="1" style="stop-color:#8CC63F"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_4_)" points="9.456,11.332 16.132,11.901 15.502,11.217 20.137,10.874 14.84,10.498 15.078,11.409 	"/>
+	<path fill="none" stroke="#FFFFFF" stroke-width="0.5" stroke-miterlimit="10" d="M2.641,1.241C0.76,4.633-1.742,8.713,4.604,16.52
+		c0,0,2.18,2.533,3.04,2.658"/>
+</g>
+</svg>
