@@ -7,14 +7,11 @@ Game.cameratype = ""
 
 Game.controls = {}
 Game.speed = 1.0
-Game.meshes = {}
 
 Game.date = +new Date 4200,0,1,0,0,0,0
 
 selectedItem = undefined
 hudDate = undefined
-
-window.Hotkeys = []
 
 initTJS = () ->
 	Math.seedrandom 'hello mr pepper'
@@ -47,7 +44,7 @@ initTJS = () ->
 	hudDate = document.querySelector '#hudDate'
 
 	# Set speed UI
-	updateSpeed()
+	HUD.updateSpeed()
 
 	# Setup raycaster for selections
 	Game.projector = new THREE.Projector()
@@ -59,27 +56,25 @@ initTJS = () ->
 	window.addEventListener 'resize', onWindowResize, false
 
 	# Load main ship
-	Utils.loadShip "Fermat", 1, (mesh) ->
-		Game.scene.add mesh
+	Game.scene.add Resources.models["ships/Fermat"]
 
-		# Create orbit camera
-		Game.camera["orbit"] = new THREE.PerspectiveCamera 90, window.innerWidth / window.innerHeight, 0.1, 10000000
-		Game.camera["orbit"].position.z = 2
-		Game.controls["orbit"] = new THREE.OrbitControls Game.camera["orbit"]
-		#Game.controls["orbit"].targetObject = mesh
-		mesh.add Game.camera["orbit"]
-		Game.cameras.push "orbit"
+	# Create orbit camera
+	Game.camera["orbit"] = new THREE.PerspectiveCamera 90, window.innerWidth / window.innerHeight, 0.1, 10000000
+	Game.camera["orbit"].position.z = 2
+	Game.controls["orbit"] = new THREE.OrbitControls Game.camera["orbit"]
+	Resources.models["ships/Fermat"].add Game.camera["orbit"]
+	Game.cameras.push "orbit"
 
-		# Create game camera
-		Game.camera["cockpit"] = new THREE.PerspectiveCamera 90, window.innerWidth / window.innerHeight, 0.1, 10000000
-		Game.camera["cockpit"].position.z = -1
-		Game.controls["cockpit"] = new THREE.PointerLockControls Game.camera["cockpit"], mesh
-		Game.controls["cockpit"].enabled = true
-		Game.cameras.push "cockpit"
+	# Create game camera
+	Game.camera["cockpit"] = new THREE.PerspectiveCamera 90, window.innerWidth / window.innerHeight, 0.1, 10000000
+	Game.camera["cockpit"].position.z = -1
+	Game.controls["cockpit"] = new THREE.PointerLockControls Game.camera["cockpit"], Resources.models["ships/Fermat"]
+	Game.controls["cockpit"].enabled = true
+	Game.cameras.push "cockpit"
 
-		Game.cameratype = "cockpit"
+	Game.cameratype = "cockpit"
 
-		render()
+	render()
 
 render = () ->
 	stats.begin()
@@ -104,12 +99,6 @@ Game.updateClock = () ->
 	worlddate.innerHTML = [pad(datetime.getDate(),2), monthNames[datetime.getMonth()].substr(0,3), datetime.getFullYear()].join(" ");
 	worldtime.innerHTML = [pad(datetime.getHours(),2), pad(datetime.getMinutes(),2), pad(datetime.getSeconds(),2)].join(":");
 
-updateSpeed = () ->
-	speedElements = document.querySelectorAll ".speedbtn"
-	for i in [0...speedElements]
-		speedElements[i].className = "";
-	document.querySelector("#"+currentSpeed).className = "selected";
-
 onClick = () ->
 	return unless event.button == 0
 	event.preventDefault()
@@ -132,19 +121,21 @@ onClick = () ->
 	frustum.setFromMatrix pmax.multiply Game.camera[Game.cameratype].matrixWorldInverse 
 	selectedItem = (raycaster.intersectObjects Game.scene.children, false, frustum)[0]
 
-allowed = true
+allowed = {}
 onKeyDown = (e) ->
-	return unless allowed
-	allowed = false
 	code = e.which or e.keyCode
+	return if allowed[code]? and not allowed[code]
+	allowed[code] = false
 	hk = Hotkeys.filter (x) -> x.key.charCodeAt(0) == code
 	for hksingle in hk
 		hksingle.callback()
 
 onKeyUp = (e) ->
-	allowed = true
+	code = e.which or e.keyCode
+	allowed[code] = true
+
 onFocus = (e) ->
-	allowed = true
+	allowed = {}
 
 onWindowResize = () ->
 	Game.camera.aspect = window.innerWidth / window.innerHeight
@@ -172,5 +163,4 @@ domready ->
 		document.addEventListener 'webkitpointerlockchange', pointerlockchange, false
 	else
 		startdialog.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API'
-
-	initTJS()
+	Preloader initTJS

@@ -1,6 +1,10 @@
 window.Utils = Object.create null
 loader = new THREE.JSONLoader()
 
+window.Resources =
+	"models" : {}
+	"audio" : {}
+
 Utils.loadShip = (name, size, cbok) ->
 	loader.load "assets/models/ships/"+name+".js", (geometry, materials) ->
 		ship = new THREE.Object3D()
@@ -13,4 +17,9 @@ Utils.loadShip = (name, size, cbok) ->
 			mat.shading = THREE.FlatShading
 			return mat
 		ship.add mesh
+		Resources.models["ships/"+name] = ship
 		cbok ship
+
+Utils.loadAudio = (url, cbok) -> 
+	Resources.audio[url] = new Audio url+".ogg"
+	cbok Resources.audio[url]

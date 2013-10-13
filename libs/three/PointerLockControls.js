@@ -25,13 +25,11 @@ THREE.PointerLockControls = function ( camera, ship ) {
 		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		//yawObject.rotation.y -= movementX * 0.002;
-		//yawObject.rotation.x -= movementY * 0.002;
+		if ( scope.rotate )
+			return yawObject.rotateOnAxis( new THREE.Vector3(0,0,1), movementX * 0.002 );
 
 		yawObject.rotateOnAxis( new THREE.Vector3(0,1,0), -movementX * 0.002 );
 		yawObject.rotateOnAxis( new THREE.Vector3(1,0,0), -movementY * 0.002 );
-
-		//pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
 
 	};
 
@@ -49,12 +47,30 @@ THREE.PointerLockControls = function ( camera, ship ) {
 		scope.clicking = false;
 	};
 
+	var onKeyUp = function ( event ) {
+		var code = event.keyCode || event.which;
+		if (code !== 16) return;
+		scope.rotate = false;
+	};
+
+	var onKeyDown = function ( event ) {
+		var code = event.keyCode || event.which;
+		if (code !== 16) return;
+		scope.rotate = true;
+	};
+
+	var onFocus = function ( event ) { scope.rotate = false; };
+
 	document.addEventListener( 'mousemove', onMouseMove, false );
 	document.addEventListener( 'mousedown', onMouseDown, false );
 	document.addEventListener( 'mouseup', onMouseUp, false );
+	document.addEventListener( 'keyup',   onKeyUp,   false );
+	document.addEventListener( 'keydown', onKeyDown, false );
+	document.addEventListener( 'focus',   onFocus,   false );
 
 	this.enabled = false;
 	this.clicking = false;
+	this.rotate = false;
 
 	this.getObject = function () {
 
