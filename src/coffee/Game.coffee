@@ -1,5 +1,5 @@
 window.Game = Object.create null
-Game.scene = undefined
+Game.scenes = {}
 
 Game.cameras = []
 Game.camera = {}
@@ -8,10 +8,14 @@ Game.cameratype = ""
 Game.controls = {}
 Game.speed = 1.0
 
+Game.delta = 0
 Game.date = +new Date 4200,0,1,0,0,0,0
 
 selectedItem = undefined
 hudDate = undefined
+
+window.WIDTH = window.innerWidth
+window.HEIGHT = window.innerHeight
 
 initTJS = () ->
 	Math.seedrandom 'hello mr pepper'
@@ -21,9 +25,9 @@ initTJS = () ->
 	window.worlddate = document.querySelector "#worlddate"
 	window.worldtime = document.querySelector "#worldtime"
 
-	Game.renderer = new THREE.WebGLRenderer()
-	Game.renderer.setSize window.innerWidth, window.innerHeight
-	Game.renderer.clearAlpha = 1
+	Game.renderer = new THREE.WebGLRenderer {preserveDrawingBuffer : true}
+	Game.renderer.setSize WIDTH, HEIGHT
+	Game.renderer.autoClear = false
 	container.appendChild Game.renderer.domElement
 
 	window.stats = new Stats();
@@ -31,8 +35,8 @@ initTJS = () ->
 	stats.domElement.style.top = '0px';
 	container.appendChild stats.domElement
 
-	# Create scene
-	Game.scene = new THREE.Scene()
+	# Update HUD
+	HUD.init()
 
 	# Create game world
 	Game.world = new World Game
@@ -49,44 +53,40 @@ initTJS = () ->
 	# Setup raycaster for selections
 	Game.projector = new THREE.Projector()
 
-	document.addEventListener 'mousedown', onClick, false
-	document.addEventListener 'keyup',   onKeyUp,   false
-	document.addEventListener 'keydown', onKeyDown, false
-	document.addEventListener 'focus',   onFocus,   false
 	window.addEventListener 'resize', onWindowResize, false
 
+	# Initialize Physics
+	Physics.init()
+
 	# Load main ship
-	Game.scene.add Resources.models["ships/Fermat"]
+	Game.scenes.planetScale.add Resources.models["ships/Fermat"]
+	Physics.bodies["playerShip"] = new Physics.Body Resources.models["ships/Fermat"]
 
-	# Create orbit camera
-	Game.camera["orbit"] = new THREE.PerspectiveCamera 90, window.innerWidth / window.innerHeight, 0.1, 10000000
-	Game.camera["orbit"].position.z = 2
-	Game.controls["orbit"] = new THREE.OrbitControls Game.camera["orbit"]
-	Resources.models["ships/Fermat"].add Game.camera["orbit"]
-	Game.cameras.push "orbit"
-
-	# Create game camera
-	Game.camera["cockpit"] = new THREE.PerspectiveCamera 90, window.innerWidth / window.innerHeight, 0.1, 10000000
-	Game.camera["cockpit"].position.z = -1
-	Game.controls["cockpit"] = new THREE.PointerLockControls Game.camera["cockpit"], Resources.models["ships/Fermat"]
-	Game.controls["cockpit"].enabled = true
-	Game.cameras.push "cockpit"
-
-	Game.cameratype = "cockpit"
+	Controls.init()
 
 	render()
 
 render = () ->
 	stats.begin()
 
+	# Update controls
+	Controls.update()
+
 	# Update game clock
 	Game.updateClock()
+
+	# Update HUD
+	HUD.update()
 
 	# Ask for next frame
 	requestAnimationFrame render
 
+	# Clear buffer
+	Game.renderer.clear true,true,true
+
 	# Render frame
-	Game.renderer.render Game.scene, Game.camera[Game.cameratype] if Game.scene? and Game.camera[Game.cameratype]?
+	Game.renderer.render Game.scenes.starScale, Game.camera[Game.cameratype]
+	Game.renderer.render Game.scenes.planetScale, Game.camera[Game.cameratype]
 	# Update camera modes
 	Game.controls[Game.cameratype].update() if Game.cameratype == "orbit"
 
@@ -94,58 +94,20 @@ render = () ->
 
 currentSpeed = "speed1"
 Game.updateClock = () ->
-	Game.date += Game.clock.getDelta() * 1000 * Game.speed
+	Game.delta = Game.clock.getDelta() * Game.speed
+	Game.date += Game.delta * 1000
 	datetime = new Date(Game.date);
 	worlddate.innerHTML = [pad(datetime.getDate(),2), monthNames[datetime.getMonth()].substr(0,3), datetime.getFullYear()].join(" ");
 	worldtime.innerHTML = [pad(datetime.getHours(),2), pad(datetime.getMinutes(),2), pad(datetime.getSeconds(),2)].join(":");
-
-onClick = () ->
-	return unless event.button == 0
-	event.preventDefault()
-	document.exitPointerLock() if locked
-
-	clickInfo = { x: 0, y: 0, userHasClicked: false }
-	directionVector = new THREE.Vector3()
-
-	clickInfo.x = ( event.clientX / window.innerWidth ) * 2 - 1
-	clickInfo.y = - ( event.clientY / window.innerHeight ) * 2 + 1
-	clickInfo.userHasClicked = true;
-
-	directionVector.set clickInfo.x, clickInfo.y, 0.1
-	directionVector = directionVector.sub(Game.camera[Game.cameratype].position).normalize()
-	raycaster = new THREE.Raycaster Game.camera[Game.cameratype].position, directionVector
-
-	frustum = new THREE.Frustum()
-
-	pmax = Game.camera[Game.cameratype].projectionMatrix.clone()
-	frustum.setFromMatrix pmax.multiply Game.camera[Game.cameratype].matrixWorldInverse 
-	selectedItem = (raycaster.intersectObjects Game.scene.children, false, frustum)[0]
-
-allowed = {}
-onKeyDown = (e) ->
-	code = e.which or e.keyCode
-	return if allowed[code]? and not allowed[code]
-	allowed[code] = false
-	hk = Hotkeys.filter (x) -> x.key.charCodeAt(0) == code
-	for hksingle in hk
-		hksingle.callback()
-
-onKeyUp = (e) ->
-	code = e.which or e.keyCode
-	allowed[code] = true
-
-onFocus = (e) ->
-	allowed = {}
 
 onWindowResize = () ->
 	Game.camera.aspect = window.innerWidth / window.innerHeight
 	Game.camera.updateProjectionMatrix()
 	Game.renderer.setSize window.innerWidth, window.innerHeight
+	WIDTH = window.innerWidth
+	HEIGHT = window.innerHeight
 
-window.askPointerLock = () ->
-	document.body.requestPointerLock()
-
-locked = false
+window.locked = false
 
 domready ->
 	havePointerLock = ("pointerLockElement" of document) or ("mozPointerLockElement" of document) or ("webkitPointerLockElement" of document)

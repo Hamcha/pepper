@@ -17,8 +17,10 @@
 	<!-- Game script -->
 	<script src="js/Preloader.js"></script>
 	<script src="js/HUD.js"></script>
+	<script src="js/Physics.js"></script>
 	<script src="js/World.js"></script>
 	<script src="js/Game.js"></script>
+	<script src="js/Controls.js"></script>
 	<!-- Util scrips -->
 	<script src="js/Utils/Hotkeys.js"></script>
 	<script src="js/Utils/Util.js"></script>
@@ -40,9 +42,11 @@
 				<li class="speedbtn" id="speed10000" onclick="HUD.setSpeed(10000)">10000x</li>
 			</ul>
 		</div>
+		<div id="speedmeter">Actual speed: <span id="currentSpeed">0</span> Y/s</div>
 		<hud-menu id="hudMenu"></hud-menu>
 	</div>
 	</div>
 	<div id="container"></div>
+	<div id="selection"></div>
 </body>
 </html>

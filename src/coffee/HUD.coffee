@@ -11,6 +11,14 @@ HUD.updateSpeed = () ->
 		speedElements[i].className = "speedbtn"
 	document.querySelector("#speed"+Math.round(Game.speed)).className = "speedbtn selected"
 
+speedmeter = undefined
+
+HUD.init = () ->
+	speedmeter = document.getElementById "currentSpeed"
+
+HUD.update = () ->
+	speedmeter.innerHTML = Physics.bodies.playerShip.velocity.length()
+
 HUD.setSpeed = (speed) ->
 	Game.speed = speed
 	HUD.updateSpeed()

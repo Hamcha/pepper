@@ -1,6 +1,7 @@
 preloadList =
 	ships: [{url:"Fermat", size:1}]
 	audio: ["sfx/Engine", "SadTrombone"]
+	textures: [""]
 
 resCount = preloadList.ships.length + preloadList.audio.length
 
